@@ -1,5 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AuthService } from '../../services/auth.service';
+import Swal from 'sweetalert2';
 
 @Component({
   templateUrl: './login-page.component.html',
@@ -8,6 +10,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 export class LoginPageComponent {
 
   private fb = inject(FormBuilder);
+  private authService = inject(AuthService);
 
   public loginForm: FormGroup = this.fb.group(
     {
@@ -17,7 +20,14 @@ export class LoginPageComponent {
   );
 
   login(): void {
-    console.log(this.loginForm.value);
+    const { email, password } = this.loginForm.value;
+    this.authService.login(email, password)
+      .subscribe({
+        next: () => console.log('Todo salio bien'),
+        error: msg => {
+          Swal.fire('Error', msg, 'error');
+        }
+      })
   }
 
 }
