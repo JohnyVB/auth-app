@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import Swal from 'sweetalert2';
+import { Router } from '@angular/router';
 
 @Component({
   templateUrl: './login-page.component.html',
@@ -11,11 +12,12 @@ export class LoginPageComponent {
 
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
+  private router = inject(Router);
 
   public loginForm: FormGroup = this.fb.group(
     {
-      email: ['', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]],
-      password: ['', [Validators.required, Validators.minLength(6)]]
+      email: ['johny3@google.com', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]],
+      password: ['123456', [Validators.required, Validators.minLength(6)]]
     }
   );
 
@@ -23,7 +25,10 @@ export class LoginPageComponent {
     const { email, password } = this.loginForm.value;
     this.authService.login(email, password)
       .subscribe({
-        next: () => console.log('Todo salio bien'),
+        next: () => {
+          const last_url = localStorage.getItem('last_url');
+          this.router.navigateByUrl(last_url ? last_url : '/dashboard');
+        },
         error: msg => {
           Swal.fire('Error', msg, 'error');
         }
