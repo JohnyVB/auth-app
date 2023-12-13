@@ -27,11 +27,10 @@ export class LoginPageComponent {
       .subscribe({
         next: () => {
           const last_url = localStorage.getItem('last_url');
-          this.router.navigateByUrl(last_url ? last_url : '/dashboard');
+          const url = !last_url ? '/dashboard' : last_url;
+          this.router.navigateByUrl(url);
         },
-        error: msg => {
-          Swal.fire('Error', msg, 'error');
-        }
+        error: msg => Swal.fire('Error', msg, 'error')
       })
   }
 
