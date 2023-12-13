@@ -2,4 +2,8 @@
 <hr>
 
 <h3>User</h3>
-<pre>{{user() | json}}</pre>
+<p>{{user()?._id}}</p>
+<p>{{user()?.name}}</p>
+<p>{{user()?.email}}</p>
+
+<button (click)="onLogout()">Cerrar Sesión</button>
